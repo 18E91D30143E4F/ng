@@ -69,7 +69,8 @@ int main()
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
-	printf("Минимум в : %lf", GetValueRec(2, 6, 0.001));
+	printf("Минимум в : %lf", GetValue(2, 6, 0.001));
+	printf("Минимум в : %lf (реккурсия)", GetValueRec(2, 6, 0.001));
 
 	getch();
 
