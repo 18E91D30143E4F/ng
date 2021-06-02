@@ -1,41 +1,38 @@
-/*
-	����� ������� ��������
-*/
-
+﻿#include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
-#include <stdio.h>
-#include <stdbool.h>
 #include <Windows.h>
 
-double GetFunctionValue(double x)
-{
-	return (log(x) - 5 * pow(sin(x), 2));
-}
-
-double f(double x)
-{
-	return (1. / (5. * sin(2. * x)));
-}
-
-#define MAX_I 100000
-
-int chord_method(double (*f)(double), double a, double b, double eps, double* x);
-double f(double x);
+/*
+	Выражение ln(x)-5sin(x)^2 в разрешенном виде 1/(5*sin(2*x))
+*/
 
 static int count = 0;
 
-int chord_method(double (*f)(double), double a, double b, double eps, double* x)
+double GetValue(double x)
+{
+	count++;
+	return log(x) - 5 * sin(x) * sin(x);
+}
+
+double GetValueConv(double x)
+{
+	count++;
+	return 1. / (5 * sin(2 * x));
+}
+
+int SimpleMethod(double a, double b, double eps, double* x)
 {
 	double fa, fb;
 	int i;
-	for (i = 0; i < MAX_I; i++)
+	for (i = 0; i < 100000; i++)
 	{
 		if (fabs(b - a) < eps) break;
-		fa = f(a); fb = f(b);
+		fa = GetValue(a); fb = GetValue(b);
 		a = b - (b - a) * fb / (fb - fa);
 		b = a - (a - b) * fa / (fa - fb);
 	}
-	if (i < MAX_I)
+	if (i < 100000)
 	{
 		*x = b;
 		return count;
@@ -45,17 +42,23 @@ int chord_method(double (*f)(double), double a, double b, double eps, double* x)
 
 int main(void)
 {
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
 	double a, b, eps, x = INT_MAX, predValue;
 	int iter;
 
-	printf("Input a: "); scanf_s("%lf", &a);
-	printf("Input b: "); scanf_s("%lf", &b);
-	printf("Input eps: "); scanf_s("%lf", &eps);
+	printf("Введите a: ");
+	scanf_s("%lf", &a);
+	printf("Введите b: ");
+	scanf_s("%lf", &b);
+	printf("Введите eps: ");
+	scanf_s("%lf", &eps);
 
-	while (a < b)
+	while (a <= b - 1)
 	{
 		predValue = x;
-		iter = chord_method(GetFunctionValue, a, a + 1, eps, &x);
+		iter = SimpleMethod(a, a + 0.2, eps, &x);
 		if (iter > 0 && fabs(predValue - x) > 0.0001)
 			printf("Root: %lf\n", x);
 		a++;
