@@ -27,8 +27,10 @@ int SimpleMethod(double a, double b, double eps, double* x)
 	int i;
 	for (i = 0; i < 100000; i++)
 	{
-		if (fabs(b - a) < eps) break;
-		fa = GetValue(a); fb = GetValue(b);
+		if (fabs(b - a) < eps)
+			break;
+		fa = GetValue(a);
+		fb = GetValue(b);
 		a = b - (b - a) * fb / (fb - fa);
 		b = a - (a - b) * fa / (fa - fb);
 	}
